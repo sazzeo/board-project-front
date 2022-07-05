@@ -1,0 +1,44 @@
+
+
+/*버튼 전체속성*/
+.btn {
+
+
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+
+/*라인속성*/
+
+.line {
+    width: 100px;
+    height: 0.5px;
+    background-color: #b5b5b5;
+    margin: 10px 0px;
+}
+
+
+/*el-plus : icon 속성*/
+.el-icon {
+     z-index: -1;
+ }
+
+.no-posts {
+    color: #666666;
+    height: 300px;
+    text-align: center;
+    line-height: 300px;
+    margin: 20px 0px;
+}
+
+
+/*로고*/
+.logo {
+    font-size: 30px;
+    margin: 0px 10px;
+    color: #2c3b34;
+    font-weight: 600;
+}
