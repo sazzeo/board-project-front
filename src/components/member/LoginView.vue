@@ -3,33 +3,23 @@
     <div class="login-box">
       <div class="logo">BYULOG</div>
       <el-input
-          class="input-id input-box"
-          v-model="id"
-          placeholder="아이디를 입력하세요" input-box/>
-      <el-input
-          class="input-password input-box "
-          v-model="password"
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          show-password
+        class="input-id input-box"
+        v-model="id"
+        placeholder="아이디를 입력하세요"
+        input-box
       />
-      <el-button
-          class="btn-login"
-          color="#fdb814"
-      >로그인</el-button>
+      <el-input
+        class="input-password input-box"
+        v-model="password"
+        type="password"
+        placeholder="비밀번호를 입력하세요"
+        show-password
+      />
+      <el-button class="btn-login" color="#fdb814">로그인</el-button>
       <div class="btn-group">
-        <el-button
-            class="btn-sign"
-            link
-        >아이디 찾기</el-button>
-        <el-button
-            class="btn-sign"
-            link
-        >비밀번호 찾기</el-button>
-        <el-button
-            class="btn-sign"
-            link
-        >회원가입</el-button>
+        <el-button link>아이디 찾기</el-button>
+        <el-button link>비밀번호 찾기</el-button>
+        <el-button link @click="goSignup">회원가입</el-button>
       </div>
       <div class="or-line">
         <div class="line"></div>
@@ -41,8 +31,17 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from "vue";
 
+/*변수 선언*/
+const id = ref<string>();
+const password = ref<string>();
+
+/*함수 선언*/
+const goSignup = () => {
+  $router.push("/signup");
+};
 </script>
 
 <style scoped>
@@ -53,7 +52,7 @@
 }
 
 .login-box {
-  width: 400px;
+  width: 420px;
   margin: 100px 0px;
   border: 1px solid #e5e5e5;
   border-radius: 2px;
@@ -64,8 +63,6 @@
   align-items: center;
 }
 
-
-
 .login-box > * {
   margin: 8px 0;
 }
@@ -74,11 +71,9 @@
   margin-bottom: 20px;
 }
 
-.input-box
-{
+.input-box {
   height: 40px;
   font-size: 20px;
-
 }
 
 .btn-login {
@@ -96,7 +91,7 @@
 }
 
 .btn-sign {
-  font-size:16px;
+  font-size: 16px;
 }
 
 .or-line {
@@ -105,17 +100,17 @@
 }
 
 .or-line > * {
-  color : rgba(0,0,0,0.3);
+  color: rgba(0, 0, 0, 0.3);
 }
 
 .line {
-  width: 173px;
-  background-color: rgba(0,0,0,0.3);
+  width: 150px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .or {
-  margin: 0 10px;
-  font-size:13px;
+  margin: 0 5px;
+  font-size: 13px;
+  width: 26px;
 }
-
 </style>

@@ -21,16 +21,17 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+## 프로젝트 생성하기
+```sh
+npm init vue@latest
+```
+
 ## Project Setup
 
 ```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+yarn
+yarn run lint
+yarn run dev 
 ```
 
 ### Type-Check, Compile and Minify for Production

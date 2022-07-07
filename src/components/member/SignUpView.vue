@@ -3,11 +3,11 @@
     <div class="sign-box">
       <div class="logo">BYULOG</div>
       <label>아이디</label>
-      <el-input class="input-id input-box" v-model="id" input-box />
+      <el-input class="input-id input-box" v-model="member.id" input-box />
       <label>비밀번호</label>
       <el-input
         class="input-id input-box"
-        v-model="password"
+        v-model="member.password"
         type="password"
         show-password
         input-box
@@ -21,34 +21,40 @@
         input-box
       />
       <label>이름</label>
-      <el-input class="input-id input-box" v-model="name" input-box />
+      <el-input class="input-id input-box" v-model="member.name" input-box />
       <label>휴대폰번호</label>
-      <el-input class="input-id input-box" v-model="phone" input-box />
+      <el-input class="input-id input-box" v-model="member.phone" input-box />
       <label>이메일</label>
-      <el-input class="input-id input-box" v-model="email" input-box />
+      <el-input class="input-id input-box" v-model="member.email" input-box />
       <label>주소</label>
-      <input type="text" v-model="postCode" placeholder="우편번호" />
+      <input type="text" v-model="member.postCode" placeholder="우편번호" />
       <input type="button" @click="showApi()" value="우편번호 찾기" /><br />
-      <input type="text" v-model="addr" placeholder="주소" /><br />
-      <input type="text" v-model="detailAddr" placeholder="상세주소" />
-      <input type="text" v-model="extraAddr" placeholder="참고항목" />
+      <input type="text" v-model="member.addr" placeholder="주소" /><br />
+      <input type="text" v-model="member.detailAddr" placeholder="상세주소" />
+      <input type="text" v-model="member.extraAddr" placeholder="참고항목" />
       <AddressDialog></AddressDialog>
+      <el-button type="primary" @click="signUp">가입하기</el-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Member } from "@/types/member";
+import memberApi from "@/api/modules/memberApi";
 
-const id = ref<string>();
-const password = ref<string>();
-const name = ref<string>();
-const phone = ref<string>();
-const email = ref<string>();
-const postCode = ref<number>();
-const addr = ref<string>();
-const detailAddr = ref<string>();
-const extraAddr = ref<string>();
+const member = ref<Member>({
+  id: "",
+  password: "",
+  name: "",
+  phone: "",
+  email: "이메일",
+});
+
+const signUp = async () => {
+  const res = await memberApi.addMember(member.value);
+  console.dir(res.data);
+};
 </script>
 
 <style scoped>
