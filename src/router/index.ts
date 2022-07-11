@@ -13,6 +13,16 @@ const router = createRouter({
       name: "signup",
       component: () => import("@/components/member/SignUpView.vue"),
     },
+    {
+      path: "/test1",
+      name: "test1",
+      component: () => import("@/components/test/PiniaTest1.vue"),
+    },
+    {
+      path: "/test2",
+      name: "test2",
+      component: () => import("@/components/test/PiniaTest2.vue"),
+    },
   ],
 });
 

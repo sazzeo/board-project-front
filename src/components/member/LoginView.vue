@@ -4,18 +4,20 @@
       <div class="logo">BYULOG</div>
       <el-input
         class="input-id input-box"
-        v-model="id"
+        v-model="member.id"
         placeholder="아이디를 입력하세요"
         input-box
       />
       <el-input
         class="input-password input-box"
-        v-model="password"
+        v-model="member.password"
         type="password"
         placeholder="비밀번호를 입력하세요"
         show-password
       />
-      <el-button class="btn-login" color="#fdb814">로그인</el-button>
+      <el-button class="btn-login" color="#fdb814" @click="loginMember"
+        >로그인</el-button
+      >
       <div class="btn-group">
         <el-button link>아이디 찾기</el-button>
         <el-button link>비밀번호 찾기</el-button>
@@ -33,12 +35,22 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { LoginMember } from "@/types/member";
+import memberApi from "@/api/modules/memberApi";
+import { auth } from "@/stores/modules/auth";
 
 /*변수 선언*/
-const id = ref<string>();
-const password = ref<string>();
+const member = ref<LoginMember>({
+  id: "",
+  password: "",
+});
 
 /*함수 선언*/
+const loginMember = async () => {
+  const res = await memberApi.loginMember(member.value);
+  const data = res.data;
+};
+
 const goSignup = () => {
   $router.push("/signup");
 };

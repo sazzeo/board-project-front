@@ -1,15 +1,12 @@
 <template>
   <div class="base-wrapper">
-    <RouterView/>
+    <RouterView />
   </div>
 </template>
 
-<script>
-
-</script>
+<script></script>
 
 <style scoped>
-
 .base-wrapper {
   display: flex;
   justify-content: center;

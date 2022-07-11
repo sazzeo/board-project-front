@@ -1,6 +1,9 @@
-export class Member {
+export class LoginMember {
   id = "";
   password = "";
+}
+
+export class Member extends LoginMember {
   name = "";
   email = "";
   phone = "";
