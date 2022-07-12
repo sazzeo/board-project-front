@@ -6,9 +6,4 @@
 
 <script></script>
 
-<style scoped>
-.base-wrapper {
-  display: flex;
-  justify-content: center;
-}
-</style>
+<style scoped></style>

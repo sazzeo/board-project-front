@@ -23,6 +23,35 @@ const router = createRouter({
       name: "test2",
       component: () => import("@/components/test/PiniaTest2.vue"),
     },
+    {
+      path: "/:id",
+      name: "id",
+      component: () => import("@/components/layout/WebMain.vue"),
+      children: [
+        {
+          path: "posts",
+          name: "posts",
+          component: () => import("@/components/board/BoardPage.vue"),
+        },
+      ],
+    },
+    {
+      path: "/setting",
+      name: "setting",
+      component: () => import("@/components/setting/SettingView.vue"),
+      children: [
+        {
+          path: "profile",
+          name: "profile",
+          component: () => import("@/components/setting/Profile.vue"),
+        },
+        {
+          path: "category",
+          name: "category",
+          component: () => import("@/components/setting/Category.vue"),
+        },
+      ],
+    },
   ],
 });
 

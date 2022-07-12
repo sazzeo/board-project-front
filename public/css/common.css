@@ -42,3 +42,15 @@
     color: #2c3b34;
     font-weight: 600;
 }
+
+/*토글*/
+.el-switch {
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+}
+
+.el-switch {
+    --el-switch-on-color: #fdb814
+}
+

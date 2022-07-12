@@ -47,8 +47,10 @@ const member = ref<LoginMember>({
 
 /*함수 선언*/
 const loginMember = async () => {
+  //받고나서 헤더셋팅
   const res = await memberApi.loginMember(member.value);
-  const data = res.data;
+  const authToken = res.data;
+  auth().setAuthToken(authToken);
 };
 
 const goSignup = () => {
