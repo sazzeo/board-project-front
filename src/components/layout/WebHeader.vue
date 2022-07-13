@@ -1,18 +1,17 @@
 <template>
   <div class="header-wrapper">
     <div class="header-nav">
-      <div class="logo btn" @click="clickLogo">Blog</div>
-      <div class="menu-wrapper">
-        <!--        <div class="btn-tech">Tech</div>-->
-      </div>
-
+      <div class="logo btn" @click="clickLogo">Byulog</div>
+      <div class="menu-wrapper"></div>
       <div class="sign-wrapper">
         <div class="btn" @click="toggle">
           <el-icon style="vertical-align: middle" :size="20">
             <Search />
           </el-icon>
         </div>
-        <button class="btn-sign-in">로그인</button>
+        <button class="btn-sign-in" @click="$router.push('/login')">
+          로그인
+        </button>
         <button class="btn-sign-up">회원가입</button>
       </div>
     </div>

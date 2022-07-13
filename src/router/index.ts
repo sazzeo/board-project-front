@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
+  scrollBehavior: () => {
+    // always scroll to top
+    return { top: 0 };
+  },
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -24,12 +28,21 @@ const router = createRouter({
       component: () => import("@/components/test/PiniaTest2.vue"),
     },
     {
-      path: "/:id",
+      path: "/:catchAll(.*)",
+      component: () => import("@/components/error/ErrorPage.vue"),
+    },
+    {
+      path: "/",
       name: "id",
       component: () => import("@/components/layout/WebMain.vue"),
       children: [
         {
-          path: "posts",
+          path: "",
+          name: "index",
+          component: () => import("@/components/layout/WebIndexPage.vue"),
+        },
+        {
+          path: ":id",
           name: "posts",
           component: () => import("@/components/board/BoardPage.vue"),
         },
@@ -43,12 +56,12 @@ const router = createRouter({
         {
           path: "profile",
           name: "profile",
-          component: () => import("@/components/setting/Profile.vue"),
+          component: () => import("@/components/setting/ProfileView.vue"),
         },
         {
           path: "category",
           name: "category",
-          component: () => import("@/components/setting/Category.vue"),
+          component: () => import("@/components/setting/CategoryView.vue"),
         },
       ],
     },

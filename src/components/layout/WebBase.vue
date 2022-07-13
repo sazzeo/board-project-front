@@ -6,4 +6,9 @@
 
 <script></script>
 
-<style scoped></style>
+<style scoped>
+.base-wrapper {
+  width: 100%;
+  height: 100%;
+}
+</style>

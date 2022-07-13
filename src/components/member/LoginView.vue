@@ -7,6 +7,7 @@
         v-model="member.id"
         placeholder="아이디를 입력하세요"
         input-box
+        @keyup.enter="loginMember"
       />
       <el-input
         class="input-password input-box"
@@ -14,7 +15,9 @@
         type="password"
         placeholder="비밀번호를 입력하세요"
         show-password
+        @keyup.enter="loginMember"
       />
+      <div class="error-message" v-if="message">{{ message }}</div>
       <el-button class="btn-login" color="#fdb814" @click="loginMember"
         >로그인</el-button
       >
@@ -38,6 +41,7 @@ import { ref } from "vue";
 import { LoginMember } from "@/types/member";
 import memberApi from "@/api/modules/memberApi";
 import { auth } from "@/stores/modules/auth";
+import type { AxiosError } from "@/types/axios";
 
 /*변수 선언*/
 const member = ref<LoginMember>({
@@ -45,12 +49,19 @@ const member = ref<LoginMember>({
   password: "",
 });
 
+const message = ref<string>();
+
 /*함수 선언*/
 const loginMember = async () => {
   //받고나서 헤더셋팅
-  const res = await memberApi.loginMember(member.value);
-  const authToken = res.data;
-  auth().setAuthToken(authToken);
+  try {
+    const res = await memberApi.loginMember(member.value);
+    const authToken = res.data;
+    auth().setAuthToken(authToken);
+    await $router.push("/" + member.value.id);
+  } catch (e: any) {
+    message.value = e.message;
+  }
 };
 
 const goSignup = () => {
@@ -126,5 +137,11 @@ const goSignup = () => {
   margin: 0 5px;
   font-size: 13px;
   width: 26px;
+}
+
+.error-message {
+  color: red;
+  margin-right: auto;
+  font-size: 12px;
 }
 </style>

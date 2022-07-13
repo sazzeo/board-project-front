@@ -2,7 +2,9 @@
   <!--  헤더랑 붙어있는 페이지-->
   <div class="main-wrapper">
     <WebHeader />
-    <RouterView />
+    <div class="router-wrapper">
+      <RouterView />
+    </div>
     <WebFooter />
   </div>
 </template>
@@ -16,5 +18,12 @@ import WebFooter from "./WebFooter.vue";
 .main-wrapper {
   display: flex;
   flex-direction: column;
+}
+
+.router-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
 }
 </style>
