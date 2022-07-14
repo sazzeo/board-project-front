@@ -5,10 +5,11 @@ export class LoginMember {
 
 export class Member extends LoginMember {
   name = "";
-  email = "";
-  phone = "";
+  email? = "";
+  phone? = "";
   postCode? = "";
   addr? = "";
   detailAddr? = "";
   regDate? = "";
+  authToken? = "";
 }

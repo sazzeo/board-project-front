@@ -71,52 +71,44 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import router from "../../router";
-import { useRoute } from "vue-router";
-
-const postList = ref();
-const tagName = useRoute().params.tagName;
-const pageNum = parseInt(useRoute().params.pageNum) || 1;
-const page = ref();
-const pagePath = useRoute().path;
-
-const removePagePath = () => {
-  const pageIdx = pagePath.indexOf("page");
-  if (pageIdx == -1) return pagePath + "/";
-  else return pagePath.substring(0, pageIdx);
-};
-
-const clickPost = (seq) => {
-  router.push("/posts/" + seq);
-};
-
-const clickWriteBtn = () => {
-  router.push("/posts/write");
-};
-
-const clickPageNumBtn = (i) => {
-  router.push(removePagePath() + "page/" + i);
-};
-
-const clickPrePageBtn = () => {
-  router.push(removePagePath() + "page/" + (parseInt(pageNum) - 1));
-};
-const clickNextPageBtn = () => {
-  router.push(removePagePath() + "page/" + (parseInt(pageNum) + 1));
-};
-
-const postsSubject = tagName == null ? "ALL" : "#" + tagName;
-
-const postsTest = async () => {
-  const posts = await postApi.findPosts(tagName, pageNum);
-
-  postList.value = posts.data.posts;
-  page.value = posts.data.pageable;
-  console.log(page.value);
-};
-
-postsTest();
+// import { onMounted, ref } from "vue";
+// import router from "../../router";
+// import { useRoute } from "vue-router";
+//
+// const postList = ref();
+// const tagName = useRoute().params.tagName;
+// const pageNum = parseInt(useRoute().params.pageNum) || 1;
+// const page = ref();
+// const pagePath = useRoute().path;
+//
+// const removePagePath = () => {
+//   const pageIdx = pagePath.indexOf("page");
+//   if (pageIdx == -1) return pagePath + "/";
+//   else return pagePath.substring(0, pageIdx);
+// };
+//
+// const clickPost = (seq) => {
+//   router.push("/posts/" + seq);
+// };
+//
+// const clickWriteBtn = () => {
+//   router.push("/posts/write");
+// };
+//
+// const clickPageNumBtn = (i) => {
+//   router.push(removePagePath() + "page/" + i);
+// };
+//
+// const clickPrePageBtn = () => {
+//   router.push(removePagePath() + "page/" + (parseInt(pageNum) - 1));
+// };
+// const clickNextPageBtn = () => {
+//   router.push(removePagePath() + "page/" + (parseInt(pageNum) + 1));
+// };
+//
+// const postsSubject = tagName == null ? "ALL" : "#" + tagName;
+//
+// postsTest();
 </script>
 
 <style scoped>

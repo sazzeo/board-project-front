@@ -1,7 +1,7 @@
 <template>
   <div class="header-wrapper">
     <div class="header-nav">
-      <div class="logo btn" @click="clickLogo">Byulog</div>
+      <div class="logo btn" @click="$router.push(url)">{{ title }}</div>
       <div class="menu-wrapper"></div>
       <div class="sign-wrapper">
         <div class="btn" @click="toggle">
@@ -9,10 +9,37 @@
             <Search />
           </el-icon>
         </div>
-        <button class="btn-sign-in" @click="$router.push('/login')">
-          로그인
-        </button>
-        <button class="btn-sign-up">회원가입</button>
+        <div v-if="isLogged" class="logout-wrapper">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              {{ sAuth.member.name }}
+              <el-icon class="el-icon--right">
+                <arrow-down />
+              </el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Action 1</el-dropdown-item>
+                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item>Action 3</el-dropdown-item>
+                <el-dropdown-item divided>Action 5</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <button class="btn-sign-in btn">
+            {{ sAuth.member.name }}
+          </button>
+          <div>|</div>
+          <button class="btn-sign-in btn" @click="sAuth.deleteAuthToken()">
+            로그아웃
+          </button>
+        </div>
+        <div v-else class="login-wrapper">
+          <button class="btn-sign-in btn" @click="$router.push('/login')">
+            로그인
+          </button>
+          <button class="btn-sign-up btn">회원가입</button>
+        </div>
       </div>
     </div>
   </div>
@@ -36,7 +63,37 @@
   </transition>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+import { blog } from "@/stores/modules/blog";
+import { computed, onMounted, ref } from "vue";
+import { auth } from "@/stores/modules/auth";
+
+const url = $utils.getPathVariable("id");
+const sBlog = blog();
+const sAuth = auth();
+
+const title = computed<string>(() => {
+  return sBlog.blogInfo?.title || "";
+});
+
+const isLogged = computed<boolean>(() => {
+  return sAuth.isLogged;
+});
+
+console.dir(isLogged.value);
+
+const blogInfo = async () => {
+  try {
+    await sBlog.initBlogInfo(url);
+  } catch (e) {
+    //
+  }
+};
+
+onMounted(() => {
+  blogInfo();
+});
+</script>
 
 <style scoped>
 .header-wrapper {
@@ -60,10 +117,6 @@
 
 .header-nav > * {
   display: flex;
-}
-
-.btn-tech {
-  color: #c17546;
 }
 
 /* 서치바 */
@@ -91,13 +144,18 @@
 
 /*로그인 바 */
 
-.sign-wrapper > * {
+.sign-wrapper > * > * {
   color: #c17546;
   margin: 0px 5px;
 }
 
 .sign-wrapper > *:hover {
   cursor: pointer;
+}
+
+.logout-wrapper {
+  display: flex;
+  line-height: 20px;
 }
 
 .btn-sign-in {

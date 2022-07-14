@@ -1,19 +1,42 @@
 import { defineStore } from "pinia";
+import { computed } from "vue";
+import type { LoginMember } from "@/types/member";
+import memberApi from "@/api/modules/memberApi";
+import type { Member } from "@/types/member";
 
 export const auth = defineStore(
   "auth",
   () => {
-    const authToken = ref<string>();
+    const member = ref<Member>();
 
-    const setAuthToken = (token: string) => {
-      authToken.value = token;
+    const isLogged = computed<boolean>(() => {
+      return Boolean(member.value && true);
+    });
+
+    const initAuthToken = async (loginMember: LoginMember): Promise<any> => {
+      try {
+        const res = await memberApi.loginMember(loginMember);
+        member.value = res;
+      } catch (e) {
+        //
+      }
     };
 
-    return { authToken, setAuthToken };
+    const deleteAuthToken = () => {
+      member.value = undefined;
+    };
+
+    return {
+      isLogged,
+      member,
+      initAuthToken,
+      deleteAuthToken,
+    };
   },
   {
     persist: {
-      key: "auth",
+      key: "test-byulog",
+      paths: ["member"],
     },
   }
 );

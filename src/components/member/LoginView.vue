@@ -41,7 +41,6 @@ import { ref } from "vue";
 import { LoginMember } from "@/types/member";
 import memberApi from "@/api/modules/memberApi";
 import { auth } from "@/stores/modules/auth";
-import type { AxiosError } from "@/types/axios";
 
 /*변수 선언*/
 const member = ref<LoginMember>({
@@ -49,15 +48,15 @@ const member = ref<LoginMember>({
   password: "",
 });
 
+const sAuth = auth();
+
 const message = ref<string>();
 
 /*함수 선언*/
 const loginMember = async () => {
   //받고나서 헤더셋팅
   try {
-    const res = await memberApi.loginMember(member.value);
-    const authToken = res.data;
-    auth().setAuthToken(authToken);
+    await sAuth.initAuthToken(member.value);
     await $router.push("/" + member.value.id);
   } catch (e: any) {
     message.value = e.message;

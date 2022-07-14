@@ -40,6 +40,7 @@ export default defineConfig({
             "$message",
             "$notify",
           ],
+          "@/utils": [["default", "$utils"]],
           "@/router": [["default", "$router"]],
           "@/store": [["default", "$store"]],
           "@/hooks/dayjs": ["$dayjs"],

@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import PostView from "@/components/board/PostView.vue";
 import TagBox from "@/components/board/TagBox.vue";
-import ProfileBox from "@/components/member/ProfileBox.vue";
+import ProfileBox from "@/components/board/ProfileBox.vue";
 import CategoryBox from "@/components/board/CategoryBox.vue";
 </script>
 
