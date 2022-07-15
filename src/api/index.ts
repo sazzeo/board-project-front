@@ -53,7 +53,7 @@ import type { AxiosParams } from "@/types/axios";
 //요청하는 함수 자동으로 헤더를 붙여줌
 export const request = async (axiosParams: AxiosParams): Promise<any> => {
   const authorization = auth();
-  const authToken: string = authorization.authToken || "";
+  const authToken: string = authorization.member?.authToken || "";
   const url = axiosParams.url;
   const method = axiosParams.method;
   const params = axiosParams.params;
@@ -71,22 +71,23 @@ export const request = async (axiosParams: AxiosParams): Promise<any> => {
 
   let resParams;
 
+  const authHeader = {
+    ...defaultHeader,
+    Authorization: authToken,
+  };
+
   if (method == "get") {
     resParams = {
-      headers: { ...defaultHeader },
+      headers:
+        url.indexOf("/auth") == -1 ? { ...authHeader } : { ...defaultHeader },
       ...defaultObject,
       params: params,
     };
-  } else if (method == "post" || method == "delete" || method == "update") {
-    const authHeader = {
-      ...defaultHeader,
-      Authorization: authToken,
-    };
-
+  } else if (method == "post" || method == "delete" || method == "put") {
     resParams = {
-      //만약 url에 auth가 들어가면 authHeader로 셋팅
+      //만약 url에 auth가 안들어가면 authHeader로 셋팅
       headers:
-        url.indexOf("/auth") > -1 ? { ...authHeader } : { ...defaultHeader },
+        url.indexOf("/auth") == -1 ? { ...authHeader } : { ...defaultHeader },
       ...defaultObject,
       data: data,
     };

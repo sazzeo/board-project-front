@@ -10,4 +10,17 @@ export default {
       method: "get",
     });
   },
+  findUserBlogProfile: (): Promise<any> => {
+    return request({
+      url: "/api/board/user/blog-profile",
+      method: "get",
+    });
+  },
+  modifyBlog: (blog: any): Promise<any> => {
+    return request({
+      url: "/api/board/blog",
+      method: "put",
+      data: { ...blog },
+    });
+  },
 };

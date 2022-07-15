@@ -52,8 +52,12 @@ const member = ref<Member>({
 });
 
 const signUp = async () => {
-  const res = await memberApi.addMember(member.value);
-  console.dir(res.data);
+  try {
+    const res = await memberApi.addMember(member.value);
+    await $router.push("/login");
+  } catch (e) {
+    alert(e);
+  }
 };
 </script>
 

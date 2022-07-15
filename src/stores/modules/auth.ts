@@ -18,7 +18,7 @@ export const auth = defineStore(
         const res = await memberApi.loginMember(loginMember);
         member.value = res;
       } catch (e) {
-        //
+        return Promise.reject(e);
       }
     };
 

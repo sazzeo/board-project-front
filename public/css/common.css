@@ -59,3 +59,7 @@ html , body {
     --el-switch-on-color: #fdb814
 }
 
+.el-tree-node__content {
+    color: red;
+}
+

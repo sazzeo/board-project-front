@@ -18,4 +18,11 @@ export default {
       data: { ...member },
     });
   },
+  modifyMember: (member: any): Promise<any> => {
+    return request({
+      url: "/api/board/user",
+      method: "put",
+      data: { ...member },
+    });
+  },
 };

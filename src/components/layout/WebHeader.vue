@@ -10,7 +10,7 @@
           </el-icon>
         </div>
         <div v-if="isLogged" class="logout-wrapper">
-          <el-dropdown>
+          <el-dropdown class="drop-down-login">
             <span class="el-dropdown-link">
               {{ sAuth.member.name }}
               <el-icon class="el-icon--right">
@@ -19,20 +19,30 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>Action 1</el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
+                <el-dropdown-item @click="goMYBlog(sAuth.member.id)"
+                  >내블로그</el-dropdown-item
+                >
+                <el-dropdown-item @click="$router.push('/setting/category')"
+                  >카테고리 설정</el-dropdown-item
+                >
                 <el-dropdown-item>Action 3</el-dropdown-item>
-                <el-dropdown-item divided>Action 5</el-dropdown-item>
+                <el-dropdown-item
+                  divided
+                  @click="$router.push('/setting/profile')"
+                  >내정보</el-dropdown-item
+                >
+                <el-dropdown-item
+                  @click="
+                    () => {
+                      sAuth.deleteAuthToken();
+                      $router.push('/login');
+                    }
+                  "
+                  >로그아웃</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <button class="btn-sign-in btn">
-            {{ sAuth.member.name }}
-          </button>
-          <div>|</div>
-          <button class="btn-sign-in btn" @click="sAuth.deleteAuthToken()">
-            로그아웃
-          </button>
         </div>
         <div v-else class="login-wrapper">
           <button class="btn-sign-in btn" @click="$router.push('/login')">
@@ -45,7 +55,7 @@
   </div>
   <div class="space"></div>
   <transition name="fade">
-    <div class="search-bar-wrapper" v-if="t">
+    <div class="search-bar-wrapper" v-if="false">
       <el-select class="select-bar" v-model="value" placeholder="Select">
         <el-option :key="'all'" :value="'전체'" />
         <el-option :key="'title'" :value="'제목'" />
@@ -73,7 +83,7 @@ const sBlog = blog();
 const sAuth = auth();
 
 const title = computed<string>(() => {
-  return sBlog.blogInfo?.title || "";
+  return sBlog.blogInfo.title || "Byulog";
 });
 
 const isLogged = computed<boolean>(() => {
@@ -88,6 +98,10 @@ const blogInfo = async () => {
   } catch (e) {
     //
   }
+};
+
+const goMYBlog = (url: string) => {
+  $router.push("/" + url);
 };
 
 onMounted(() => {
@@ -149,8 +163,8 @@ onMounted(() => {
   margin: 0px 5px;
 }
 
-.sign-wrapper > *:hover {
-  cursor: pointer;
+.drop-down-login {
+  margin: 4px 10px;
 }
 
 .logout-wrapper {

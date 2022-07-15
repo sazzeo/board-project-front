@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { auth } from "@/stores/modules/auth";
 
 const router = createRouter({
   scrollBehavior: () => {
@@ -9,7 +10,7 @@ const router = createRouter({
   routes: [
     {
       path: "/login",
-      name: "home",
+      name: "login",
       component: () => import("@/components/member/LoginView.vue"),
     },
     {
@@ -57,6 +58,9 @@ const router = createRouter({
           path: "profile",
           name: "profile",
           component: () => import("@/components/setting/ProfileView.vue"),
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "category",
@@ -66,6 +70,21 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+//to : 진입 페이지
+router.beforeEach(async (to, from, next) => {
+  //로그인 1차로 체크하기
+  const sAuth = auth();
+  const isLogged = sAuth.isLogged;
+  const authPage = to.meta.auth;
+
+  //만약 인증이 필요한 페이지 && 로그인 되어있지 않으면?
+  if (authPage && !isLogged) {
+    next("login");
+    return;
+  }
+  next();
 });
 
 export default router;
