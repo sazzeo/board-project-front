@@ -60,6 +60,12 @@ html , body {
 }
 
 .el-tree-node__content {
-    color: red;
+    border: solid thin black;
+    padding : 40px;
+
+}
+
+.el-tree-node__label {
+    font-size : 20px;
 }
 

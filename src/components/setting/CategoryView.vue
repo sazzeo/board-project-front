@@ -16,6 +16,7 @@
         @node-drag-over="handleDragOver"
         @node-drag-end="handleDragEnd"
         @node-drop="handleDrop"
+        :icon="1"
       />
     </div>
   </div>
