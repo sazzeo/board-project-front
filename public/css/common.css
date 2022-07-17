@@ -69,3 +69,9 @@ html , body {
     font-size : 20px;
 }
 
+.el-tree__drop-indicator {
+    background-color: red;
+    height: 50px;
+    position: absolute;
+    right:50px;
+}

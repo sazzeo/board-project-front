@@ -17,6 +17,7 @@
         @node-drag-end="handleDragEnd"
         @node-drop="handleDrop"
         :icon="1"
+        indent="40"
       />
     </div>
   </div>

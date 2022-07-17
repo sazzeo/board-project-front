@@ -67,6 +67,11 @@ const router = createRouter({
           name: "category",
           component: () => import("@/components/setting/CategoryView.vue"),
         },
+        {
+          path: "category2",
+          name: "category2",
+          component: () => import("@/components/setting/CategoryView2.vue"),
+        },
       ],
     },
   ],
