@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.0.0-alpha.1",
     "element-plus": "^2.2.8",
+    "lodash": "^4.17.21",
     "pinia": "^2.0.14",
     "pinia-plugin-persistedstate": "^1.6.1",
     "vue": "^3.2.37",

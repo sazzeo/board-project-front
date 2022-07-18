@@ -23,4 +23,10 @@ export default {
       data: { ...blog },
     });
   },
+  findCategory: (): Promise<any> => {
+    return request({
+      url: "/api/board/category",
+      method: "get",
+    });
+  },
 };

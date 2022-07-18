@@ -1,40 +1,77 @@
 <template>
-  <draggable class="dragArea" tag="ul" :list="tasks" :group="{ name: 'g1' }">
-    <li v-for="el in tasks" :key="el.name">
-      <p>{{ el.name }}</p>
-      <nested-draggable :tasks="el.tasks" />
-    </li>
-  </draggable>
+  <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
 </template>
 
-<script setup>
-import draggable from "@/vuedraggable";
-export default {
-  props: {
-    tasks: {
-      required: true,
-      type: Array
-    }
+<script lang="ts" setup>
+interface Tree {
+  label: string;
+  children?: Tree[];
+}
+
+const handleNodeClick = (data: Tree) => {
+  console.log(data);
+};
+
+const data: Tree[] = [
+  {
+    label: "Level one 1",
+    children: [
+      {
+        label: "Level two 1-1",
+        children: [
+          {
+            label: "Level three 1-1-1",
+          },
+        ],
+      },
+    ],
   },
-  components: {
-    draggable
+  {
+    label: "Level one 2",
+    children: [
+      {
+        label: "Level two 2-1",
+        children: [
+          {
+            label: "Level three 2-1-1",
+          },
+        ],
+      },
+      {
+        label: "Level two 2-2",
+        children: [
+          {
+            label: "Level three 2-2-1",
+          },
+        ],
+      },
+    ],
   },
-  name: "nested-draggable"
+  {
+    label: "Level one 3",
+    children: [
+      {
+        label: "Level two 3-1",
+        children: [
+          {
+            label: "Level three 3-1-1",
+          },
+        ],
+      },
+      {
+        label: "Level two 3-2",
+        children: [
+          {
+            label: "Level three 3-2-1",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const defaultProps = {
+  children: "children",
+  label: "label",
 };
 </script>
-<style scoped>
-.dragArea {
-  min-height: 50px;
-  outline: 1px dashed;
-}
-</script>
-
-<style scoped>
-.category-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.category-box {
-}
-</style>
