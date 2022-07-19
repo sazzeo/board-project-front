@@ -16,6 +16,11 @@ html , body {
 }
 
 
+.info-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 /*라인속성*/
 
 .line {

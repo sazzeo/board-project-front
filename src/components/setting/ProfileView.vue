@@ -187,11 +187,6 @@ findUserBlogProfile();
   border-bottom: solid #b5b5b5 1px;
 }
 
-.info-title {
-  font-weight: bold;
-  font-size: 20px;
-}
-
 .profile-box > * {
   margin: 30px 0px;
 }

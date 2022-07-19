@@ -99,6 +99,12 @@ export const request = async (axiosParams: AxiosParams): Promise<any> => {
     });
     return Promise.resolve(res.data);
   } catch (e: any) {
+    //만약 401 인가 에러가 나면?
+    if (e.response.status == 401) {
+      await $router.push("/login");
+      return;
+    }
+
     return Promise.reject(e.response.data);
   }
 };
