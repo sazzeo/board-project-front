@@ -4,7 +4,12 @@ export class Category {
   sort? = 0;
   totalCnt? = 0;
   upCategory? = 0;
-  children? = [];
+  children = [];
   publicYn? = true;
   isSelect? = false;
+}
+
+export class CategoryInfo {
+  title? = "";
+  publicYn? = false;
 }

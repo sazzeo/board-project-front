@@ -1,6 +1,8 @@
 <template>
   <div class="profile-box-wrapper">
-    <div class="profile-image">image</div>
+    <div class="profile-image">
+      <img class="profile-image" src="public/image/콜라.png" />
+    </div>
     <div class="name">
       {{ blogInfo.name }}<span> ({{ blogInfo.id }})</span>
     </div>
@@ -39,6 +41,7 @@ const blogInfo = computed<BlogInfo>(() => {
 .profile-image {
   width: 180px;
   height: 180px;
+  overflow: hidden;
   background-color: #fdb814;
   text-align: center;
   line-height: 180px;

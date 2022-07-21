@@ -5,11 +5,15 @@
       <div class="category-box-wrapper">
         <div class="button-wrapper">
           <el-button style="color: white" color="#fdb814" @click="addCategory()"
-            >카테고리 추가</el-button
-          >
-          <el-button style="color: white" color="#fdb814">삭제</el-button>
+            >카테고리 추가
+          </el-button>
+          <el-button
+            style="color: white"
+            color="#fdb814"
+            @click="removeCategory()"
+            >삭제
+          </el-button>
         </div>
-
         <div class="category-box">
           <div>🍦🍧카테고리</div>
           <el-tree
@@ -48,18 +52,25 @@
             input-box
             v-model="categoryInfo.title"
             placeholder="카테고리명을 입력하세요"
-            :disabled="isSelect"
+            :disabled="selectedNode.isSelect"
           />
         </div>
         <div class="public-yn">
           <div class="label">공개여부</div>
-          <el-switch v-model="categoryInfo.publicYn" size="large" />
+          <el-switch
+            v-model="categoryInfo.publicYn"
+            size="large"
+            :disabled="selectedNode.isSelect"
+          />
         </div>
       </div>
     </div>
     <div class="button-wrapper">
+      <el-button style="color: white" color="#fdb814">되돌리기</el-button>
       <el-button style="color: white" color="#fdb814">취소</el-button>
-      <el-button style="color: white" color="#fdb814">저장</el-button>
+      <el-button style="color: white" color="#fdb814" @click="saveCategory"
+        >저장
+      </el-button>
     </div>
   </div>
   <div>{{ data }}</div>
@@ -72,40 +83,64 @@ import type Node from "element-plus/es/components/tree/src/model/node";
 import type { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 import type { DropType } from "element-plus/es/components/tree/src/tree.type";
 import blogApi from "@/api/modules/blogApi";
-import { Category } from "@/types/category";
+import type { Category } from "@/types/category";
 import { computed } from "vue";
+import { assignWith } from "lodash";
+import { CategoryInfo } from "@/types/category";
 
 const treeRef = ref();
 
-//처음진입시 노드 선택 여부
-const selectedNode = ref<object>({ isSelect: false, currentNode: "" });
-
-const categoryInfo = ref<Category>(new Category());
-
-const nodeClick = (node: any) => {
-  categoryInfo.value = node;
-
-  //  7/19 여기서부터 찍어보기
-  //selectedNode.value.isSelect = false;
-};
-
 const test = () => {
-  console.dir(categoryInfo.value);
+  console.dir("test");
 };
 
+//처음진입시 노드 선택 여부
+const selectedNode = ref<any>({
+  isSelect: true,
+  currentNodeKey: "",
+  currentNode: "",
+});
+
+const categoryInfo = ref<CategoryInfo>({ title: " " });
+
+/*노드 클릭했을 때 선택*/
+const nodeClick = (node: any, node2: any) => {
+  categoryInfo.value = node;
+  selectedNode.value.isSelect = false;
+  selectedNode.value.currentNodeKey = node2.id;
+  selectedNode.value.currentNode = node2;
+};
+
+/*새로운 카테고리 추가*/
 const addCategory = () => {
   //먼저 데이터 다시 세팅
   changeData();
   const newCategory: Category = {
     title: "새 카테고리",
     totalCnt: 0,
-    isSelect: true,
+    publicYn: true,
+    children: [],
   };
-  //data.value[0].children.push(newCategory);
   categoryInfo.value = newCategory;
   const rootNode: Node = treeRef.value.getNode("all");
-  treeRef.value.append(newCategory, rootNode);
-  isSelect.value = false;
+  treeRef.value.append(newCategory, rootNode); //전체보기 제일 뒤에 새로운 카테고리 추가
+  selectedNode.value.isSelect = false;
+};
+
+/*카테고리 지우기*/
+const removeCategory = () => {
+  const currentNode = selectedNode.value.currentNode;
+  console.dir(currentNode);
+  if (currentNode.childNodes.length > 0) {
+    alert("하위 카테고리가 존재합니다.");
+    return;
+  }
+  if (currentNode.data.totalCnt > 0) {
+    alert("글을 모두 지워주세요.");
+  }
+  treeRef.value.remove(currentNode);
+  categoryInfo.value = { title: " " };
+  selectedNode.value.isSelect = true;
 };
 
 const defaultProps = {
@@ -193,6 +228,25 @@ const changeData = () => {
 };
 
 findCategory();
+
+const saveCategory = async () => {
+  const categories: Array<Category> = _.cloneDeep(data.value[0].children);
+  const categoryList: Category[] = [];
+
+  _.forEach<Category>(categories, (category) => {
+    //만약 하위 카테고리가 존재하고 , 새로운 카테고리가 아닌경우에는 자식도 넣는다.
+    if (category.children.length > 0 && category.categorySeq != null) {
+      _.forEach<Category>(category.children, (child) => {
+        categoryList.push(child);
+      });
+      category.children = [];
+    }
+    categoryList.push(category);
+  });
+  console.dir(categoryList);
+
+  const res = await blogApi.modifyCategory(categoryList);
+};
 </script>
 
 <style scoped>

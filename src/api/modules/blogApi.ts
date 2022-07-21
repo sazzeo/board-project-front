@@ -2,6 +2,7 @@ import type { Member } from "@/types/member";
 import type { AxiosPromise } from "axios";
 import type { LoginMember } from "@/types/member";
 import { request } from "@/api";
+import type { Category } from "@/types/category";
 
 export default {
   findBlogProfile: (url: string): Promise<any> => {
@@ -27,6 +28,13 @@ export default {
     return request({
       url: "/api/board/category",
       method: "get",
+    });
+  },
+  modifyCategory: (category: Array<Category>): Promise<any> => {
+    return request({
+      url: "/api/board/category",
+      method: "put",
+      data: [...category],
     });
   },
 };
