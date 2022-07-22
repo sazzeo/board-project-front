@@ -1,5 +1,6 @@
 <template>
   <div class="board-list-wrapper">
+    포스트뷰 {{ route }}
     <div class="posts-subject">{{ postsSubject }}</div>
     <div class="posts-total" v-if="page">
       TOTAL {{ page.totalElements || 0 }}
@@ -71,44 +72,11 @@
 </template>
 
 <script setup lang="ts">
-// import { onMounted, ref } from "vue";
-// import router from "../../router";
-// import { useRoute } from "vue-router";
-//
-// const postList = ref();
-// const tagName = useRoute().params.tagName;
-// const pageNum = parseInt(useRoute().params.pageNum) || 1;
-// const page = ref();
-// const pagePath = useRoute().path;
-//
-// const removePagePath = () => {
-//   const pageIdx = pagePath.indexOf("page");
-//   if (pageIdx == -1) return pagePath + "/";
-//   else return pagePath.substring(0, pageIdx);
-// };
-//
-// const clickPost = (seq) => {
-//   router.push("/posts/" + seq);
-// };
-//
-// const clickWriteBtn = () => {
-//   router.push("/posts/write");
-// };
-//
-// const clickPageNumBtn = (i) => {
-//   router.push(removePagePath() + "page/" + i);
-// };
-//
-// const clickPrePageBtn = () => {
-//   router.push(removePagePath() + "page/" + (parseInt(pageNum) - 1));
-// };
-// const clickNextPageBtn = () => {
-//   router.push(removePagePath() + "page/" + (parseInt(pageNum) + 1));
-// };
-//
-// const postsSubject = tagName == null ? "ALL" : "#" + tagName;
-//
-// postsTest();
+const postList = ref();
+
+const clickWriteBtn = () => {
+  $router.push("/write");
+};
 </script>
 
 <style scoped>

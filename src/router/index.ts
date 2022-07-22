@@ -29,6 +29,14 @@ const router = createRouter({
       component: () => import("@/components/test/PiniaTest2.vue"),
     },
     {
+      path: "/write",
+      name: "write",
+      component: () => import("@/components/board/WritePost.vue"),
+      meta: {
+        auth: true,
+      },
+    },
+    {
       path: "/:catchAll(.*)",
       component: () => import("@/components/error/ErrorPage.vue"),
     },
@@ -46,6 +54,20 @@ const router = createRouter({
           path: ":id",
           name: "posts",
           component: () => import("@/components/board/BoardPage.vue"),
+          children: [
+            {
+              path: ":parentCategory",
+              name: "parent-category",
+              component: () => import("@/components/board/BoardPage.vue"),
+              children: [
+                {
+                  path: ":childCategory",
+                  name: "child-category",
+                  component: () => import("@/components/board/BoardPage.vue"),
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -66,11 +88,6 @@ const router = createRouter({
           path: "category",
           name: "category",
           component: () => import("@/components/setting/CategoryView.vue"),
-        },
-        {
-          path: "category2",
-          name: "category2",
-          component: () => import("@/components/setting/CategoryView2.vue"),
         },
       ],
     },

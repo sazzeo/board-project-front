@@ -1,7 +1,7 @@
 <template>
   <div class="profile-box-wrapper">
     <div class="profile-image">
-      <img class="profile-image" src="public/image/콜라.png" />
+      <img class="profile-image" src="/public/image/콜라.png" />
     </div>
     <div class="name">
       {{ blogInfo.name }}<span> ({{ blogInfo.id }})</span>

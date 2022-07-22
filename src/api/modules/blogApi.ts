@@ -30,6 +30,18 @@ export default {
       method: "get",
     });
   },
+  findCategoryByUrl: (url: string): Promise<any> => {
+    return request({
+      url: "/api/board/auth/" + url + "/category",
+      method: "get",
+    });
+  },
+  findCategoryForSelectBox: (): Promise<any> => {
+    return request({
+      url: "/api/board/category/select-box",
+      method: "get",
+    });
+  },
   modifyCategory: (category: Array<Category>): Promise<any> => {
     return request({
       url: "/api/board/category",

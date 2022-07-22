@@ -1,0 +1,120 @@
+<template>
+  <div class="write-post-wrapper">
+    <div class="write-post">
+      <div class="select-category">
+        <el-select v-model="value" class="m-2" placeholder="Select">
+          <el-option
+            v-for="item in categories"
+            :key="item.categorySeq"
+            :label="item.title"
+            :value="item.categorySeq"
+            :class="{ child: true }"
+          />
+        </el-select>
+      </div>
+      <div class="input-title">
+        <input
+          class="title"
+          v-model="posts.title"
+          placeholder="제목을 입력하세요"
+        />
+      </div>
+      <el-input
+        class="input-content"
+        v-model="posts.content"
+        :autosize="{ minRows: 23 }"
+        type="textarea"
+      />
+      <div class="btn-wrapper">
+        <div class="btn">
+          <el-button color="#c17546" plain @click="cancelBtn">취소</el-button>
+          <el-button color="#c17546" plain @click="addPosts"> 등록 </el-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { Posts } from "@/types/posts";
+import BlogApi from "@/api/modules/blogApi";
+import type { Category } from "@/types/category";
+
+const categories = ref<Array<Category>>();
+
+const posts = ref<Posts>({
+  title: "",
+  content: "",
+  categorySeq: 0,
+});
+
+const findCategoryForSelectBox = async () => {
+  const res: Array<Category> = await BlogApi.findCategoryForSelectBox();
+  _.forEach(res, (category: Category) => {
+    if (category.categorySeq != category.upCategory) {
+      category.title = "->" + category.title;
+    }
+  });
+  categories.value = res;
+  console.dir(res);
+};
+
+const cancelBtn = () => {
+  $router.go(-1); //페이지 이동 함수
+};
+
+const addPosts = () => {};
+
+findCategoryForSelectBox();
+</script>
+
+<style scoped>
+.write-post-wrapper {
+  display: flex;
+  justify-content: center;
+  /*border: thin solid blue;*/
+  align-items: center;
+}
+
+.write-post {
+  width: 1000px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  margin: 100px 0px;
+}
+
+.select-category {
+  display: flex;
+  width: 900px;
+}
+
+.input-title {
+}
+
+.title {
+  font-size: 20px;
+  margin: 30px 0px 20px 0px;
+  border-color: transparent;
+  border-bottom: darkgray thin solid;
+  width: 900px;
+  padding: 10px;
+  display: flex;
+}
+
+.input-content {
+  width: 900px;
+  padding: 10px;
+}
+
+.btn-wrapper {
+  margin: 10px 0px;
+  width: 920px;
+  display: flex;
+  justify-content: right;
+}
+
+.child {
+  color: red;
+}
+</style>

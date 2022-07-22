@@ -216,20 +216,22 @@ const findCategory = async () => {
   data.value = [{ title: "전체보기", children: res, id: "all" }];
 };
 
+findCategory();
+
 //sort 세팅해서 다시보내기/ 바뀜 여부만....흠.........??
 const changeData = () => {
-  _.forEach(data.value, (parent, index) => {
-    parent.upCategory = null;
-    _.forEach(parent.children, (child, index) => {
+  _.forEach(data.value[0].children, (parent, i) => {
+    parent.upCategory = null; //부모의 경우 upCategory null로 만들기
+    parent.sort = i + 1;
+    _.forEach(parent.children, (child, j) => {
       child.upCategory = parent.categorySeq;
-      child.sort = index + 1;
+      child.sort = j + 1;
     });
   });
 };
 
-findCategory();
-
 const saveCategory = async () => {
+  changeData();
   const categories: Array<Category> = _.cloneDeep(data.value[0].children);
   const categoryList: Category[] = [];
 
@@ -246,6 +248,7 @@ const saveCategory = async () => {
   console.dir(categoryList);
 
   const res = await blogApi.modifyCategory(categoryList);
+  $router.go(0);
 };
 </script>
 
