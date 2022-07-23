@@ -2,13 +2,22 @@
   <div class="write-post-wrapper">
     <div class="write-post">
       <div class="select-category">
-        <el-select v-model="value" class="m-2" placeholder="Select">
+        <el-select
+          v-model="value"
+          class="m-2"
+          placeholder="Select"
+          @change="setCategory"
+        >
           <el-option
             v-for="item in categories"
             :key="item.categorySeq"
-            :label="item.title"
+            :label="
+              item.categorySeq != item.upCategory
+                ? '- ' + item.title
+                : item.title
+            "
             :value="item.categorySeq"
-            :class="{ child: true }"
+            :class="{ child: item.categorySeq != item.upCategory }"
           />
         </el-select>
       </div>
@@ -39,8 +48,10 @@
 import type { Posts } from "@/types/posts";
 import BlogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
+import PostApi from "@/api/modules/postApi";
 
 const categories = ref<Array<Category>>();
+const value = ref<string>();
 
 const posts = ref<Posts>({
   title: "",
@@ -48,13 +59,12 @@ const posts = ref<Posts>({
   categorySeq: 0,
 });
 
+const setCategory = (categorySeq: number) => {
+  posts.value.categorySeq = categorySeq;
+};
+
 const findCategoryForSelectBox = async () => {
   const res: Array<Category> = await BlogApi.findCategoryForSelectBox();
-  _.forEach(res, (category: Category) => {
-    if (category.categorySeq != category.upCategory) {
-      category.title = "->" + category.title;
-    }
-  });
   categories.value = res;
   console.dir(res);
 };
@@ -63,7 +73,10 @@ const cancelBtn = () => {
   $router.go(-1); //페이지 이동 함수
 };
 
-const addPosts = () => {};
+const addPosts = async () => {
+  const res = await PostApi.addPosts(posts.value);
+  console.log(res); //등록했으면 해당 포스트로 보내는 로직 추가예정
+};
 
 findCategoryForSelectBox();
 </script>
@@ -115,6 +128,6 @@ findCategoryForSelectBox();
 }
 
 .child {
-  color: red;
+  margin-left: 10px;
 }
 </style>
