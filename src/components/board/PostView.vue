@@ -1,5 +1,6 @@
 <template>
   <div class="board-list-wrapper">
+    {{ urlParams }}
     포스트뷰 {{ route }}
     <div class="posts-subject">{{ postsSubject }}</div>
     <div class="posts-total" v-if="page">
@@ -72,11 +73,29 @@
 </template>
 
 <script setup lang="ts">
+import PostApi from "@/api/modules/postApi";
+
+const urlParams = computed(() => $router.currentRoute.value);
+
 const postList = ref();
+
+const findPosts = async () => {
+  const urlParams: any = $router.currentRoute.value.params;
+  const url = urlParams.id;
+  const category1 = urlParams.parentCategory;
+  const category2 = urlParams.childCategory;
+  const res = await PostApi.findPosts(url, category1, category2);
+};
 
 const clickWriteBtn = () => {
   $router.push("/write");
 };
+
+watch(urlParams, () => {
+  findPosts();
+});
+
+watchEffect(() => {});
 </script>
 
 <style scoped>
