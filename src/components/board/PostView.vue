@@ -1,8 +1,6 @@
 <template>
   <div class="board-list-wrapper">
-    {{ urlParams }}
-    포스트뷰 {{ route }}
-    <div class="posts-subject">{{ postsSubject }}</div>
+    <div class="posts-subject">{{ categoryName }}</div>
     <div class="posts-total" v-if="page">
       TOTAL {{ page.totalElements || 0 }}
     </div>
@@ -19,7 +17,7 @@
       </div>
       <TagListBtn :tagList="post.tagList" />
       <div class="bottom-wrapper">
-        <div class="member">{{ post.member }}</div>
+        <div class="member">{{ post.id }}</div>
         <div>|</div>
         <div class="date">
           <el-icon style="vertical-align: middle">
@@ -63,7 +61,7 @@
           >다음</el-button
         >
       </el-button-group>
-      <div class="btn-write">
+      <div v-if="urlParams.params.id == userId" class="btn-write">
         <el-button style="color: white" color="#c17546" @click="clickWriteBtn"
           >글쓰기</el-button
         >
@@ -74,20 +72,46 @@
 
 <script setup lang="ts">
 import PostApi from "@/api/modules/postApi";
+import type { Category } from "@/types/category";
+import type { Posts } from "@/types/posts";
+import postApi from "@/api/modules/postApi";
+import { post } from "@/stores/modules/post";
+import { auth } from "@/stores/modules/auth";
 
 const urlParams = computed(() => $router.currentRoute.value);
+const categoryName = ref<string>();
+const postList = ref<Array<Posts>>();
+const sPost = post();
+const sAuth = auth();
 
-const postList = ref();
+const userId = ref<string>();
+userId.value = sAuth.member?.id;
 
-const findPosts = async () => {
+const setCategoryName = () => {
   const urlParams: any = $router.currentRoute.value.params;
-  const url = urlParams.id;
-  const category1 = urlParams.parentCategory;
-  const category2 = urlParams.childCategory;
+  const category =
+    urlParams.childCategory == null
+      ? urlParams.parentCategory
+      : urlParams.childCategory;
+  categoryName.value = category;
+};
+const findPosts = async () => {
+  const url = $utils.getPathVariable("id");
+  const category1 = $utils.getPathVariable("parentCategory");
+  const category2 = $utils.getPathVariable("childCategory");
+  setCategoryName();
   const res = await PostApi.findPosts(url, category1, category2);
+  postList.value = res;
+};
+
+const clickPost = (postsSeq: string) => {
+  const id = $utils.getPathVariable("id");
+  const url = $utils.makeUrl([id, "posts", postsSeq]);
+  $router.push(url);
 };
 
 const clickWriteBtn = () => {
+  sPost.setCategoryName(categoryName.value || "");
   $router.push("/write");
 };
 
@@ -96,6 +120,10 @@ watch(urlParams, () => {
 });
 
 watchEffect(() => {});
+
+onMounted(() => {
+  findPosts();
+});
 </script>
 
 <style scoped>

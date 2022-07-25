@@ -1,7 +1,7 @@
 <template>
   <div class="board-page-wrapper">
     <div class="post-view">
-      <PostView />
+      <RouterView />
     </div>
     <div class="side-wrapper">
       <div>
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import PostView from "@/components/board/PostView.vue";
-import TagBox from "@/components/board/TagBox.vue";
+import TagBox from "@/components/tag/TagBox.vue";
 import ProfileBox from "@/components/board/ProfileBox.vue";
 import CategoryBox from "@/components/board/CategoryBox.vue";
 </script>

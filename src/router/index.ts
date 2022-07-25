@@ -56,16 +56,19 @@ const router = createRouter({
           component: () => import("@/components/board/BoardPage.vue"),
           children: [
             {
-              path: ":parentCategory",
-              name: "parent-category",
-              component: () => import("@/components/board/BoardPage.vue"),
-              children: [
-                {
-                  path: ":childCategory",
-                  name: "child-category",
-                  component: () => import("@/components/board/BoardPage.vue"),
-                },
+              path: "",
+              alias: [
+                "category/:parentCategory",
+                "category/:parentCategory/:childCategory",
               ],
+              name: "posts-of-cateogry",
+              component: () => import("@/components/board/PostView.vue"),
+            },
+
+            {
+              path: "posts/:postsSeq",
+              name: "read-post",
+              component: () => import("@/components/board/ReadPost.vue"),
             },
           ],
         },
@@ -100,7 +103,7 @@ router.beforeEach(async (to, from, next) => {
   const sAuth = auth();
   const isLogged = sAuth.isLogged;
   const authPage = to.meta.auth;
-
+  console.log(to);
   //만약 인증이 필요한 페이지 && 로그인 되어있지 않으면?
   if (authPage && !isLogged) {
     next("login");

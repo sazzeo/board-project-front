@@ -41,7 +41,7 @@ const findCategory = async () => {
 };
 
 const goCategory = (node: Category, node2: any) => {
-  let url = "/" + $router.currentRoute.value.params.id;
+  let url = "/" + $router.currentRoute.value.params.id + "/category";
   if (node2.level == 3) {
     url += "/" + node2.parent.data.title;
   }

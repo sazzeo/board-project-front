@@ -34,6 +34,7 @@
         :autosize="{ minRows: 23 }"
         type="textarea"
       />
+      <InputTagList v-model:tagList="tagList" />
       <div class="btn-wrapper">
         <div class="btn">
           <el-button color="#c17546" plain @click="cancelBtn">취소</el-button>
@@ -49,9 +50,13 @@ import type { Posts } from "@/types/posts";
 import BlogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
 import PostApi from "@/api/modules/postApi";
+import { post } from "@/stores/modules/post";
+import InputTagList from "@/components/tag/InputTagList.vue";
 
 const categories = ref<Array<Category>>();
-const value = ref<string>();
+const value = ref<number>();
+const tagList = ref<Array<string>>([]);
+const sPost = post();
 
 const posts = ref<Posts>({
   title: "",
@@ -66,7 +71,6 @@ const setCategory = (categorySeq: number) => {
 const findCategoryForSelectBox = async () => {
   const res: Array<Category> = await BlogApi.findCategoryForSelectBox();
   categories.value = res;
-  console.dir(res);
 };
 
 const cancelBtn = () => {
@@ -74,7 +78,7 @@ const cancelBtn = () => {
 };
 
 const addPosts = async () => {
-  const res = await PostApi.addPosts(posts.value);
+  const res = await PostApi.addPosts(posts.value, tagList.value);
   console.log(res); //등록했으면 해당 포스트로 보내는 로직 추가예정
 };
 

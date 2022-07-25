@@ -16,11 +16,28 @@ export default {
     });
   },
 
-  addPosts: (post: Posts): Promise<any> => {
+  findPost: (postsSeq: string): Promise<any> => {
+    return request(
+      {
+        url: "/api/board/auth/posts/" + postsSeq,
+        method: "get",
+      },
+      true
+    );
+  },
+
+  addPosts: (post: Posts, tagNameList: Array<string>): Promise<any> => {
     return request({
       url: "/api/board/posts",
       method: "post",
-      data: { ...post },
+      data: { posts: { ...post, tagsDto: { tagName: [...tagNameList] } } },
+    });
+  },
+
+  deletePosts: (postsSeq: number): Promise<any> => {
+    return request({
+      url: "/api/board/posts/" + postsSeq,
+      method: "delete",
     });
   },
 };

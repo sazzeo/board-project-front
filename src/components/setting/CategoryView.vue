@@ -84,9 +84,7 @@ import type { DragEvents } from "element-plus/es/components/tree/src/model/useDr
 import type { DropType } from "element-plus/es/components/tree/src/tree.type";
 import blogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
-import { computed } from "vue";
-import { assignWith } from "lodash";
-import { CategoryInfo } from "@/types/category";
+import type { CategoryInfo } from "@/types/category";
 
 const treeRef = ref();
 
