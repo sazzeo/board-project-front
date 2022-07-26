@@ -3,7 +3,7 @@
     <div class="text-category">Categories</div>
     <el-tree
       ref="treeRef"
-      :data="data"
+      :data="props.data"
       :props="defaultProps"
       default-expand-all
       node-key="id"
@@ -26,30 +26,30 @@
 <script setup lang="ts">
 import blogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
+const props = defineProps<{
+  data: Array<Category>;
+}>();
 
-const data = ref();
 const defaultProps = {
   children: "children",
   label: "label",
 };
-
 const router = ref();
-const findCategory = async () => {
-  const router: any = $router.currentRoute.value.params;
-  const res = await blogApi.findCategoryByUrl(router.id);
-  data.value = [{ title: "전체보기", children: res, id: "all" }];
-};
 
 const goCategory = (node: Category, node2: any) => {
-  let url = "/" + $router.currentRoute.value.params.id + "/category";
+  const id = $utils.getPathVariable("id");
+  if (node2.level == 1) {
+    $router.push("/" + id);
+    return;
+  }
+
+  let url = $utils.makeUrl([id, "category"]);
   if (node2.level == 3) {
     url += "/" + node2.parent.data.title;
   }
   url += "/" + node2.data.title;
   $router.push(url);
 };
-
-findCategory();
 </script>
 
 <style scoped>

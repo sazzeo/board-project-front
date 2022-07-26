@@ -1,7 +1,7 @@
 <template>
   <div class="tag-list-wrapper">
     <div class="text-tags">Tags</div>
-    <div class="tag-list" v-for="tag in tagCountList">
+    <div class="tag-list" v-for="tag in props.data">
       <span class="hash">#</span>
       <span class="tag btn" @click="clickTag(tag.tagName)"
         >{{ tag.tagName }} ({{ tag.count }})</span
@@ -10,7 +10,29 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BlogApi from "@/api/modules/blogApi";
+import type { Tag } from "@/types/tag";
+import { defineProps } from "vue";
+
+const props = defineProps<{
+  data: Array<Tag>;
+}>();
+
+const url = ref<string>("");
+url.value = $utils.getPathVariable("id");
+
+const tagCountList = ref<Array<Tag>>();
+
+const findTopOfTags = async () => {
+  const res = await BlogApi.findTopOfTags(url.value);
+  tagCountList.value = res;
+};
+
+onMounted(() => {
+  // findTopOfTags();
+});
+</script>
 
 <style scoped>
 .tag-list-wrapper {
@@ -28,7 +50,7 @@
 }
 
 .tag-list {
-  margin: 15px 0px;
+  margin: 7px 0px;
 }
 
 .tag-list > span {

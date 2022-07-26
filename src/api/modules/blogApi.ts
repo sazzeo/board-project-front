@@ -17,7 +17,7 @@ export default {
       method: "get",
     });
   },
-  modifyBlog: (blog: any): Promise<any> => {
+  modifyBlog: (blog: Record<string, any>): Promise<any> => {
     return request({
       url: "/api/board/blog",
       method: "put",
@@ -47,6 +47,12 @@ export default {
       url: "/api/board/category",
       method: "put",
       data: [...category],
+    });
+  },
+  findTopOfTags: (url: string): Promise<any> => {
+    return request({
+      url: "/api/board/auth/" + url + "/tag-box",
+      method: "get",
     });
   },
 };

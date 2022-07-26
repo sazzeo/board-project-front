@@ -72,17 +72,18 @@
 
 <script setup lang="ts">
 import PostApi from "@/api/modules/postApi";
-import type { Category } from "@/types/category";
 import type { Posts } from "@/types/posts";
-import postApi from "@/api/modules/postApi";
 import { post } from "@/stores/modules/post";
 import { auth } from "@/stores/modules/auth";
+import TagListBtn from "@/components/tag/TagListBtn.vue";
 
 const urlParams = computed(() => $router.currentRoute.value);
 const categoryName = ref<string>();
 const postList = ref<Array<Posts>>();
 const sPost = post();
 const sAuth = auth();
+
+const page = ref(false);
 
 const userId = ref<string>();
 userId.value = sAuth.member?.id;
@@ -95,10 +96,11 @@ const setCategoryName = () => {
       : urlParams.childCategory;
   categoryName.value = category;
 };
+
 const findPosts = async () => {
   const url = $utils.getPathVariable("id");
-  const category1 = $utils.getPathVariable("parentCategory");
-  const category2 = $utils.getPathVariable("childCategory");
+  const category1 = $utils.getPathVariable("parentCategory") || null;
+  const category2 = $utils.getPathVariable("childCategory") || null;
   setCategoryName();
   const res = await PostApi.findPosts(url, category1, category2);
   postList.value = res;

@@ -130,6 +130,7 @@ import BlogApi from "@/api/modules/blogApi";
 import type { BlogMember } from "@/types/blog";
 import MemberApi from "@/api/modules/memberApi";
 import { computed } from "vue";
+import { ElMessage } from "element-plus";
 
 const member = ref<BlogMember>({
   id: "",
@@ -153,9 +154,14 @@ const modifyMember = async (key: string, value: any) => {
   data[key] = value;
   try {
     const res = await MemberApi.modifyMember(data);
+    open();
   } catch (e) {
     //
   }
+};
+
+const open = () => {
+  ElMessage("수정되었습니다.");
 };
 
 const modifyBlog = async (key: string, value: any) => {
@@ -163,6 +169,7 @@ const modifyBlog = async (key: string, value: any) => {
   data[key] = value;
   try {
     const res = await BlogApi.modifyBlog(data);
+    open();
   } catch (e) {
     //
   }

@@ -66,16 +66,15 @@
       </div>
     </div>
     <div class="button-wrapper">
-      <el-button style="color: white" color="#fdb814">되돌리기</el-button>
+      <el-button style="color: white" color="#fdb814" @click="backup()"
+        >되돌리기</el-button
+      >
       <el-button style="color: white" color="#fdb814">취소</el-button>
       <el-button style="color: white" color="#fdb814" @click="saveCategory"
         >저장
       </el-button>
     </div>
   </div>
-  <div>{{ data }}</div>
-  <button @click="changeData">버튼</button>
-  <button @click="test()">현재선택버튼</button>
 </template>
 
 <script setup lang="ts">
@@ -85,12 +84,9 @@ import type { DropType } from "element-plus/es/components/tree/src/tree.type";
 import blogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
 import type { CategoryInfo } from "@/types/category";
+import { ElMessage } from "element-plus";
 
 const treeRef = ref();
-
-const test = () => {
-  console.dir("test");
-};
 
 //처음진입시 노드 선택 여부
 const selectedNode = ref<any>({
@@ -104,7 +100,11 @@ const categoryInfo = ref<CategoryInfo>({ title: " " });
 /*노드 클릭했을 때 선택*/
 const nodeClick = (node: any, node2: any) => {
   categoryInfo.value = node;
-  selectedNode.value.isSelect = false;
+  if (node2.level == 1) {
+    selectedNode.value.isSelect = true;
+  } else {
+    selectedNode.value.isSelect = false;
+  }
   selectedNode.value.currentNodeKey = node2.id;
   selectedNode.value.currentNode = node2;
 };
@@ -207,14 +207,16 @@ const allowDrag = (draggingNode: Node) => {
   return true;
 };
 
-const data = ref();
+const data = ref<any>([]);
+
+let dataBackup;
 
 const findCategory = async () => {
   const res = await blogApi.findCategory();
   data.value = [{ title: "전체보기", children: res, id: "all" }];
-};
 
-findCategory();
+  dataBackup = _.cloneDeep(data.value);
+};
 
 //sort 세팅해서 다시보내기/ 바뀜 여부만....흠.........??
 const changeData = () => {
@@ -243,11 +245,31 @@ const saveCategory = async () => {
     }
     categoryList.push(category);
   });
-  console.dir(categoryList);
 
-  const res = await blogApi.modifyCategory(categoryList);
-  $router.go(0);
+  try {
+    const res = await blogApi.modifyCategory(categoryList);
+    await $router.go(0);
+  } catch (e) {
+    //
+  }
 };
+
+const backup = () => {
+  data.value = _.cloneDeep(dataBackup);
+  initSelectNode();
+};
+
+const initSelectNode = () => {
+  selectedNode.value.isSelect = true;
+  selectedNode.value.currentNodeKey = "";
+  selectedNode.value.currentNode = "";
+  categoryInfo.value.title = " ";
+  categoryInfo.value.publicYn = false;
+};
+
+onMounted(() => {
+  findCategory();
+});
 </script>
 
 <style scoped>

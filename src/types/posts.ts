@@ -6,4 +6,5 @@ export class Posts {
   id? = "";
   views? = 0;
   likeCnt? = 0;
+  tagList? = [];
 }

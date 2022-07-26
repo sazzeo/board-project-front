@@ -61,7 +61,7 @@ const router = createRouter({
                 "category/:parentCategory",
                 "category/:parentCategory/:childCategory",
               ],
-              name: "posts-of-cateogry",
+              name: "posts-of-category",
               component: () => import("@/components/board/PostView.vue"),
             },
 

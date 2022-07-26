@@ -15,7 +15,7 @@ export const request = async (
   const params = axiosParams.params;
   const data = axiosParams.data;
 
-  console.log(data);
+  // console.log(data);
 
   if (isAuth == null) {
     isAuth = false;

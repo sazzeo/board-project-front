@@ -43,9 +43,11 @@
 import type { Posts } from "@/types/posts";
 import postApi from "@/api/modules/postApi";
 import { auth } from "@/stores/modules/auth";
+import TagListBtn from "@/components/tag/TagListBtn.vue";
 const sAuth = auth();
 
 const userId = ref<string>();
+
 userId.value = sAuth.member?.id;
 
 const post = ref<Posts>();
@@ -53,6 +55,7 @@ const post = ref<Posts>();
 const findPost = async () => {
   const postSeq = $utils.getPathVariable("postsSeq");
   const res = await postApi.findPost(postSeq);
+  console.dir(res);
   post.value = res;
 };
 
@@ -67,7 +70,7 @@ findPost();
 <style scoped>
 .read-post-wrapper {
   display: flex;
-  width: 650px;
+  width: 750px;
   flex-direction: column;
 }
 
