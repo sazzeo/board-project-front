@@ -3,7 +3,13 @@
     <div class="sign-box">
       <div class="logo">BYULOG</div>
       <label>아이디</label>
-      <el-input class="input-id input-box" v-model="member.id" input-box />
+      <el-input
+        class="input-id input-box"
+        v-model="member.id"
+        input-box
+        @focusout="idCheck()"
+      />
+      <div class="message" v-if="message.id.view">{{ message.id.label }}</div>
       <label>비밀번호</label>
       <el-input
         class="input-id input-box"
@@ -19,21 +25,25 @@
         type="password"
         show-password
         input-box
+        @keyup="passwordCheckFn"
       />
+      <div class="message" v-if="message.password.view">
+        {{ message.password.label }}
+      </div>
       <label>이름</label>
       <el-input class="input-id input-box" v-model="member.name" input-box />
       <label>휴대폰번호</label>
       <el-input class="input-id input-box" v-model="member.phone" input-box />
       <label>이메일</label>
-      <el-input class="input-id input-box" v-model="member.email" input-box />
-      <label>주소</label>
-      <input type="text" v-model="member.postCode" placeholder="우편번호" />
-      <input type="button" @click="showApi()" value="우편번호 찾기" /><br />
-      <input type="text" v-model="member.addr" placeholder="주소" /><br />
-      <input type="text" v-model="member.detailAddr" placeholder="상세주소" />
-      <input type="text" v-model="member.extraAddr" placeholder="참고항목" />
-      <AddressDialog></AddressDialog>
-      <el-button type="primary" @click="signUp">가입하기</el-button>
+      <el-input
+        class="input-id input-box"
+        v-model="member.email"
+        input-box
+        type="email"
+      />
+      <el-button class="sign-btn" type="primary" @click="signUp" color="#fdb814"
+        >가입하기</el-button
+      >
     </div>
   </div>
 </template>
@@ -42,21 +52,79 @@
 import { ref } from "vue";
 import type { Member } from "@/types/member";
 import memberApi from "@/api/modules/memberApi";
+import { ElMessage } from "element-plus";
 
 const member = ref<Member>({
   id: "",
   password: "",
   name: "",
-  phone: "",
-  email: "이메일",
+  phone: undefined,
+  email: "",
 });
 
+const message = ref<any>({
+  id: {
+    label: "이미 사용중인 아이디 입니다.",
+    view: false,
+  },
+  password: {
+    label: "비밀번호가 일치하지 않습니다.",
+    view: false,
+  },
+});
+
+const passwordCheck = ref<string>("");
+
+const idCheck = async () => {
+  const res = await memberApi.idCheck(member.value.id);
+  message.value.id.view = res > 0 ? true : false;
+};
+
+const passwordCheckFn = () => {
+  message.value.password.view =
+    member.value.password != passwordCheck.value ? true : false;
+};
+
+const isMemberEmpty = (): boolean => {
+  let res = false;
+  _.forEach(member.value, (e) => {
+    if (!e) {
+      console.dir("false");
+      res = true;
+      return;
+    }
+  });
+  if (!passwordCheck.value) {
+    return true;
+  }
+  return res;
+};
+
+const isMemberValid = (): boolean => {
+  let res = false;
+  _.forEach(message.value, (e) => {
+    if (e.view) {
+      res = true;
+    }
+    return;
+  });
+  return res;
+};
+
 const signUp = async () => {
+  if (isMemberEmpty()) {
+    ElMessage("빈칸을 모두 입력해주세요.");
+    return;
+  }
+  if (isMemberValid()) {
+    ElMessage("유효한 값을 입력해주세요.");
+    return;
+  }
   try {
     const res = await memberApi.addMember(member.value);
     await $router.push("/login");
-  } catch (e) {
-    alert(e);
+  } catch (e: any) {
+    ElMessage(e.message[0].label);
   }
 };
 </script>
@@ -92,8 +160,20 @@ const signUp = async () => {
   margin-bottom: 20px;
 }
 
+.message {
+  width: 100%;
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+}
+
 .input-box {
   height: 40px;
   font-size: 15px;
+}
+
+.sign-btn {
+  font-weight: bold;
+  margin-top: 40px;
 }
 </style>

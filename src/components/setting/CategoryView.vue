@@ -69,7 +69,9 @@
       <el-button style="color: white" color="#fdb814" @click="backup()"
         >되돌리기</el-button
       >
-      <el-button style="color: white" color="#fdb814">취소</el-button>
+      <el-button style="color: white" color="#fdb814" @click="cancelBtn"
+        >취소</el-button
+      >
       <el-button style="color: white" color="#fdb814" @click="saveCategory"
         >저장
       </el-button>
@@ -85,8 +87,11 @@ import blogApi from "@/api/modules/blogApi";
 import type { Category } from "@/types/category";
 import type { CategoryInfo } from "@/types/category";
 import { ElMessage } from "element-plus";
+import { auth } from "@/stores/modules/auth";
 
 const treeRef = ref();
+
+const sAuth = auth();
 
 //처음진입시 노드 선택 여부
 const selectedNode = ref<any>({
@@ -130,11 +135,12 @@ const removeCategory = () => {
   const currentNode = selectedNode.value.currentNode;
   console.dir(currentNode);
   if (currentNode.childNodes.length > 0) {
-    alert("하위 카테고리가 존재합니다.");
+    ElMessage("하위 카테고리가 존재합니다.");
     return;
   }
   if (currentNode.data.totalCnt > 0) {
-    alert("글을 모두 지워주세요.");
+    ElMessage("글을 모두 지워주세요.");
+    return;
   }
   treeRef.value.remove(currentNode);
   categoryInfo.value = { title: " " };
@@ -209,7 +215,7 @@ const allowDrag = (draggingNode: Node) => {
 
 const data = ref<any>([]);
 
-let dataBackup;
+let dataBackup: any;
 
 const findCategory = async () => {
   const res = await blogApi.findCategory();
@@ -218,7 +224,6 @@ const findCategory = async () => {
   dataBackup = _.cloneDeep(data.value);
 };
 
-//sort 세팅해서 다시보내기/ 바뀜 여부만....흠.........??
 const changeData = () => {
   _.forEach(data.value[0].children, (parent, i) => {
     parent.upCategory = null; //부모의 경우 upCategory null로 만들기
@@ -230,28 +235,61 @@ const changeData = () => {
   });
 };
 
+const cancelBtn = () => {
+  const id: string = sAuth.member?.id || "";
+  $router.push("/" + id);
+};
+
 const saveCategory = async () => {
   changeData();
   const categories: Array<Category> = _.cloneDeep(data.value[0].children);
   const categoryList: Category[] = [];
+  const titleList: string[] = []; //타이틀 중복체크용 리스트
 
   _.forEach<Category>(categories, (category) => {
     //만약 하위 카테고리가 존재하고 , 새로운 카테고리가 아닌경우에는 자식도 넣는다.
     if (category.children.length > 0 && category.categorySeq != null) {
       _.forEach<Category>(category.children, (child) => {
         categoryList.push(child);
+        titleList.push(child.title || "");
       });
       category.children = [];
+    } else if (category.categorySeq == null) {
+      _.forEach<Category>(category.children, (child) => {
+        titleList.push(child.title || "");
+      });
     }
+    titleList.push(category.title || "");
     categoryList.push(category);
   });
-
+  const isTitleValid = isValid(titleList);
+  if (!isTitleValid) {
+    ElMessage({ message: "카테고리명은 중복될 수 없습니다.", type: "warning" });
+    return;
+  }
   try {
     const res = await blogApi.modifyCategory(categoryList);
+    alert("저장되었습니다.");
     await $router.go(0);
   } catch (e) {
     //
   }
+};
+
+//카테고리명 유효성 검사
+const isValid = (titleList: Array<string>): boolean => {
+  const titleCheckList: string[] = [];
+  let res = true;
+  _.forEach(titleList, (title: string) => {
+    if (titleCheckList.indexOf(title) == -1) {
+      titleCheckList.push(title);
+    } else {
+      res = false;
+      return false;
+    }
+  });
+
+  return res;
 };
 
 const backup = () => {

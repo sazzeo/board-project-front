@@ -11,22 +11,18 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
+      meta: {
+        unAuth: true,
+      },
       component: () => import("@/components/member/LoginView.vue"),
     },
     {
       path: "/signup",
       name: "signup",
+      meta: {
+        unAuth: true,
+      },
       component: () => import("@/components/member/SignUpView.vue"),
-    },
-    {
-      path: "/test1",
-      name: "test1",
-      component: () => import("@/components/test/PiniaTest1.vue"),
-    },
-    {
-      path: "/test2",
-      name: "test2",
-      component: () => import("@/components/test/PiniaTest2.vue"),
     },
     {
       path: "/write",
@@ -57,11 +53,17 @@ const router = createRouter({
           children: [
             {
               path: "",
-              alias: [
-                "category/:parentCategory",
-                "category/:parentCategory/:childCategory",
-              ],
-              name: "posts-of-category",
+              name: "posts-of-category1",
+              component: () => import("@/components/board/PostView.vue"),
+            },
+            {
+              path: "category/:parentCategory",
+              name: "posts-of-category2",
+              component: () => import("@/components/board/PostView.vue"),
+            },
+            {
+              path: "category/:parentCategory/:childCategory",
+              name: "posts-of-category3",
               component: () => import("@/components/board/PostView.vue"),
             },
 
@@ -91,6 +93,9 @@ const router = createRouter({
           path: "category",
           name: "category",
           component: () => import("@/components/setting/CategoryView.vue"),
+          meta: {
+            auth: true,
+          },
         },
       ],
     },
@@ -103,10 +108,15 @@ router.beforeEach(async (to, from, next) => {
   const sAuth = auth();
   const isLogged = sAuth.isLogged;
   const authPage = to.meta.auth;
+  const unAuthPage = to.meta.unAuth;
   console.log(to);
-  //만약 인증이 필요한 페이지 && 로그인 되어있지 않으면?
   if (authPage && !isLogged) {
+    //만약 인증이 필요한 페이지 && 로그인 되어있지 않으면?
     next("login");
+    return;
+  } else if (unAuthPage && isLogged) {
+    //만약 인증이 필요하지 않은 페이지에 로그인 되어있으면?
+    next(sAuth.member?.id || "");
     return;
   }
   next();

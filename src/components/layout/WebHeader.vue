@@ -1,7 +1,7 @@
 <template>
   <div class="header-wrapper">
     <div class="header-nav">
-      <div class="logo btn" @click="$router.push(url)">{{ title }}</div>
+      <div class="logo btn" @click="goBlog(url)">{{ title }}</div>
       <div class="menu-wrapper"></div>
       <div class="sign-wrapper">
         <div class="btn" @click="toggle">
@@ -98,6 +98,10 @@ const blogInfo = async () => {
   } catch (e) {
     //
   }
+};
+
+const goBlog = (url: string) => {
+  $router.push("/" + url);
 };
 
 const goMYBlog = (url: string) => {

@@ -1,13 +1,13 @@
 <template>
   <div class="board-list-wrapper">
-    <div class="posts-subject">{{ categoryName }}</div>
+    <div class="posts-subject">{{ categoryName || "전체보기" }}</div>
     <div class="posts-total" v-if="page">
       TOTAL {{ page.totalElements || 0 }}
     </div>
     <div class="line"></div>
-    <div class="no-posts" v-if="page && page.totalElements == null">
-      게시글이 존재하지 않습니다.
-    </div>
+    <!--    <div class="no-posts" v-if="postList.length == 0">-->
+    <!--      게시글이 존재하지 않습니다.-->
+    <!--    </div>-->
     <div class="post-wrapper" v-for="post in postList">
       <div class="title btn" @click="clickPost(post.postsSeq)">
         {{ post.title }}

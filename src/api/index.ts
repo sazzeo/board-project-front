@@ -70,7 +70,6 @@ export const request = async (
       await $router.push("/login");
       return;
     }
-
     return Promise.reject(e.response.data);
   }
 };

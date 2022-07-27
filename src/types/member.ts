@@ -6,7 +6,7 @@ export class LoginMember {
 export class Member extends LoginMember {
   name = "";
   email? = "";
-  phone? = "";
+  phone? = 0;
   postCode? = "";
   addr? = "";
   detailAddr? = "";

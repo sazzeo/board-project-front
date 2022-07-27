@@ -25,4 +25,11 @@ export default {
       data: { ...member },
     });
   },
+  idCheck: (id: string): Promise<any> => {
+    return request({
+      url: "/api/board/auth/id-check",
+      method: "get",
+      params: { id },
+    });
+  },
 };

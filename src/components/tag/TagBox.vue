@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-list-wrapper">
+  <div v-if="props.data" class="tag-list-wrapper">
     <div class="text-tags">Tags</div>
     <div class="tag-list" v-for="tag in props.data">
       <span class="hash">#</span>
@@ -21,17 +21,6 @@ const props = defineProps<{
 
 const url = ref<string>("");
 url.value = $utils.getPathVariable("id");
-
-const tagCountList = ref<Array<Tag>>();
-
-const findTopOfTags = async () => {
-  const res = await BlogApi.findTopOfTags(url.value);
-  tagCountList.value = res;
-};
-
-onMounted(() => {
-  // findTopOfTags();
-});
 </script>
 
 <style scoped>
