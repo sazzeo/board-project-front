@@ -20,16 +20,18 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item @click="goMYBlog(sAuth.member.id)"
-                  >내블로그</el-dropdown-item
+                  >내 블로그</el-dropdown-item
                 >
-                <el-dropdown-item @click="$router.push('/setting/category')"
-                  >카테고리 설정</el-dropdown-item
+                <el-dropdown-item @click="$router.push('/write')"
+                  >글쓰기</el-dropdown-item
                 >
-                <el-dropdown-item>Action 3</el-dropdown-item>
                 <el-dropdown-item
                   divided
                   @click="$router.push('/setting/profile')"
                   >내정보</el-dropdown-item
+                >
+                <el-dropdown-item @click="$router.push('/setting/category')"
+                  >카테고리 설정</el-dropdown-item
                 >
                 <el-dropdown-item
                   @click="

@@ -78,7 +78,6 @@ const cancelBtn = () => {
 };
 
 const addPosts = async () => {
-  console.log("실행");
   const tagNameList: any = [];
 
   _.forEach(tagList.value, (tag) => {
@@ -87,7 +86,7 @@ const addPosts = async () => {
 
   posts.value.tagList = tagNameList;
   const res = await PostApi.addPosts(posts.value);
-  console.log(res); //등록했으면 해당 포스트로 보내는 로직 추가예정
+  $router.go(-1);
 };
 
 findCategoryForSelectBox();

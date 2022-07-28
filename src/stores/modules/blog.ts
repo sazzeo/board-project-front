@@ -6,6 +6,7 @@ export const blog = defineStore("blog", () => {
 
   const initBlogInfo = async (url: string): Promise<any> => {
     const res = await blogApi.findBlogProfile(url);
+    console.dir(res);
     blogInfo.value = res;
   };
 

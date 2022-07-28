@@ -1,6 +1,9 @@
 <template>
   <div v-if="props.data" class="tag-list-wrapper">
     <div class="text-tags">Tags</div>
+    <div v-if="props.data.length == 0" class="tag-message">
+      태그가 존재하지 않습니다.
+    </div>
     <div class="tag-list" v-for="tag in props.data">
       <span class="hash">#</span>
       <span class="tag btn" @click="clickTag(tag.tagName)"
@@ -21,6 +24,10 @@ const props = defineProps<{
 
 const url = ref<string>("");
 url.value = $utils.getPathVariable("id");
+
+const clickTag = (tagName: string) => {
+  $router.push($utils.makeUrl([url.value, "tags", tagName]));
+};
 </script>
 
 <style scoped>
@@ -54,5 +61,10 @@ url.value = $utils.getPathVariable("id");
 .tag:hover {
   color: #fdb814;
   transition-duration: 0.1s;
+}
+
+.tag-message {
+  font-size: 13px;
+  color: #666666;
 }
 </style>

@@ -1,13 +1,11 @@
 <template>
   <div class="board-list-wrapper">
     <div class="posts-subject">{{ categoryName || "전체보기" }}</div>
-    <div class="posts-total" v-if="page">
-      TOTAL {{ page.totalElements || 0 }}
-    </div>
+    <div class="posts-total" v-if="page">TOTAL</div>
     <div class="line"></div>
-    <!--    <div class="no-posts" v-if="postList.length == 0">-->
-    <!--      게시글이 존재하지 않습니다.-->
-    <!--    </div>-->
+    <div class="no-posts" v-if="postList && postList.length == 0">
+      게시글이 존재하지 않습니다.
+    </div>
     <div class="post-wrapper" v-for="post in postList">
       <div class="title btn" @click="clickPost(post.postsSeq)">
         {{ post.title }}
@@ -98,12 +96,24 @@ const setCategoryName = () => {
 };
 
 const findPosts = async () => {
+  const pathArray = $router.currentRoute.value.path.split("/");
+  const path = pathArray.length > 2 ? pathArray[2] : "";
+
   const url = $utils.getPathVariable("id");
-  const category1 = $utils.getPathVariable("parentCategory") || null;
-  const category2 = $utils.getPathVariable("childCategory") || null;
-  setCategoryName();
-  const res = await PostApi.findPosts(url, category1, category2);
-  postList.value = res;
+
+  if (path == "category" || path == "") {
+    const category1 = $utils.getPathVariable("parentCategory") || null;
+    const category2 = $utils.getPathVariable("childCategory") || null;
+    setCategoryName();
+    const res = await PostApi.findPosts(url, category1, category2);
+    postList.value = res;
+  } else if (path == "tags") {
+    const tagName = $utils.getPathVariable("tagName");
+    const res = await PostApi.findPostWithTags(url, tagName);
+    postList.value = res;
+  }
+
+  console.dir(postList.value);
 };
 
 const clickPost = (postsSeq: string) => {
