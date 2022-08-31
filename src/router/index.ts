@@ -122,7 +122,6 @@ router.beforeEach(async (to, from, next) => {
   if (unAuthPage && isLogged) {
     //만약 인증이 필요하지 않은 페이지에 로그인 되어있으면?
     next("/" + sAuth.member?.id || "");
-    next;
     return;
   }
   next();
