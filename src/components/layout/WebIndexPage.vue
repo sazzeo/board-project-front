@@ -4,19 +4,21 @@
       <el-row>
         <el-col class="mb-2 pr-2">
           <div class="flex justify-between">
-            <div class="text-xl font-bold ml-3 leading-10">카테고리</div>
+            <div class="text-xl font-bold ml-3 leading-10">청소 관리</div>
             <div>
-              <el-button type="primary" @click="openDialog(null, false, false)">
-                카테고리 추가<el-svg-icon name="plus" class="ml-1" />
+              <el-button type="primary">
+                청소 타입 추가<el-svg-icon name="plus" class="ml-1" />
               </el-button>
             </div>
           </div>
         </el-col>
-        <el-col class="mr-8" :span="4" v-for="l of list">
+        <el-col :span="6" v-for="(l, index) of list" :key="index">
           <div class="card">
             <div class="card-header">
               <div class="name">
-                {{ l.title }}
+                <el-button plain size="small" class="font-bold">
+                  <div class="text-lg">{{ l.title }}</div>
+                </el-button>
               </div>
               <el-tooltip
                 class="item"
@@ -24,15 +26,15 @@
                 content="수정"
                 placement="top"
               >
-                <div class="score">{{ l.score }}점</div>
               </el-tooltip>
             </div>
             <div class="card-body">
-              <div class="ranking" v-for="(rank, index) of ranking">
-                <div class="rank">{{ rankingIcon[index] }}</div>
-                <div class="member-name">
-                  {{ rank }}
-                </div>
+              <div
+                class="flex justify-between"
+                style="padding: 5px 12px; align-items: center"
+              >
+                <div class="rank">점수</div>
+                <div class="member-name">{{ l.score }}점</div>
               </div>
             </div>
           </div>
@@ -47,8 +49,9 @@ const list = ref<Array<any>>([
   { title: "로봇청소기", score: 5 },
   { title: "쓰레기", score: 5 },
   { title: "설거지", score: 20 },
+  { title: "로청+쓰레기", score: 10 },
+  { title: "바닥", score: 20 },
   { title: "손걸레", score: 5 },
-  { title: "분리수거", score: 10 },
 ]);
 
 const ranking = ref<Array<string>>(["임지영", "임지영", "임지영"]);
@@ -75,6 +78,8 @@ const rankingIcon = ref<Array<string>>(["🥇", "🥈", "🥉"]);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: solid #ebeef5 thin;
+  background-color: #fdb814;
 }
 
 .name {
@@ -91,11 +96,16 @@ const rankingIcon = ref<Array<string>>(["🥇", "🥈", "🥉"]);
 .card-body {
   display: flex;
   flex-direction: column;
+  padding: 10px 0px;
 }
 
 .ranking {
   display: flex;
   justify-content: space-between;
-  padding: 4px 10px;
+  padding: 5px 12px;
+}
+
+.member-name {
+  font-size: 20px;
 }
 </style>
