@@ -89,7 +89,6 @@ const isMemberEmpty = (): boolean => {
   let res = false;
   _.forEach(member.value, (e) => {
     if (!e) {
-      console.dir("false");
       res = true;
       return;
     }
@@ -122,6 +121,7 @@ const signUp = async () => {
   }
   try {
     const res = await memberApi.addMember(member.value);
+    alert("가입되었습니다.");
     await $router.push("/login");
   } catch (e: any) {
     ElMessage(e.message[0].label);

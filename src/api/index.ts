@@ -67,6 +67,7 @@ export const request = async (
   } catch (e: any) {
     //만약 401 인가 에러가 나면?
     if (e.response.status == 401) {
+      authorization.deleteAuthToken();
       await $router.push("/login");
       return;
     }

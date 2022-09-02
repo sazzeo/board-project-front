@@ -72,6 +72,11 @@ const router = createRouter({
               name: "read-post",
               component: () => import("@/components/board/ReadPost.vue"),
             },
+            {
+              path: "tags/:tagName",
+              name: "posts-of-tags",
+              component: () => import("@/components/board/PostView.vue"),
+            },
           ],
         },
       ],
@@ -107,16 +112,16 @@ router.beforeEach(async (to, from, next) => {
   //로그인 1차로 체크하기
   const sAuth = auth();
   const isLogged = sAuth.isLogged;
-  const authPage = to.meta.auth;
-  const unAuthPage = to.meta.unAuth;
-  console.log(to);
+  const authPage = to.meta.auth || false;
+  const unAuthPage = to.meta.unAuth || false;
   if (authPage && !isLogged) {
     //만약 인증이 필요한 페이지 && 로그인 되어있지 않으면?
     next("login");
     return;
-  } else if (unAuthPage && isLogged) {
+  }
+  if (unAuthPage && isLogged) {
     //만약 인증이 필요하지 않은 페이지에 로그인 되어있으면?
-    next(sAuth.member?.id || "");
+    next("/" + sAuth.member?.id || "");
     return;
   }
   next();

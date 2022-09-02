@@ -31,7 +31,12 @@ export default {
       true
     );
   },
-
+  findPostWithTags: (url: string, tagName: string): Promise<any> => {
+    return request({
+      url: "/api/board/auth/posts/" + url + "/tags/" + tagName,
+      method: "get",
+    });
+  },
   addPosts: (post: Posts): Promise<any> => {
     return request({
       url: "/api/board/posts",
